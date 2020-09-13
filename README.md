@@ -1,1 +1,2 @@
-# Info-management-system
+# Friendly-Information-Management-System
+
