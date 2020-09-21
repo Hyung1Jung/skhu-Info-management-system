@@ -1,2 +1,2 @@
-Info-Management-System
+sof info management system
 
