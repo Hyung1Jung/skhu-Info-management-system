@@ -1,0 +1,7 @@
+package com.skhu.hyungil.project.mycontact.repository;
+
+import com.skhu.hyungil.project.mycontact.domain.Person;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface PersonRepository extends JpaRepository<Person, Long> {
+}
