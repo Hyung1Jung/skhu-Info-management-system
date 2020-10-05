@@ -9,12 +9,10 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-@Setter
-@Getter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @RequiredArgsConstructor
+@Data
 public class Person {
     @Id
     @GeneratedValue
@@ -28,6 +26,7 @@ public class Person {
 
     private String hobby;
 
+    @NonNull
     private String bloodType;
 
     private String address;
@@ -40,3 +39,4 @@ public class Person {
     private String phoneNumber;
 
 }
+
