@@ -34,6 +34,16 @@ class PersonServiceTest {
 
     }
 
+    @Test
+    void getPeopleByName() {
+        givenPeople();
+
+        List<Person> result = personService.getPeopleByName("형일");
+
+        result.forEach(System.out::println);
+    }
+
+
     private void givenBlocks() {
         givenBlock("형일");
     }
