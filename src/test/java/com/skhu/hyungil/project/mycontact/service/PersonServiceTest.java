@@ -66,8 +66,24 @@ class PersonServiceTest {
         givenPerson("일권", 26, "AB");
     }
 
+    @Test
+    void findByBloodType() {
+        givenPerson("형일", 27, "A");
+        givenPerson("영곤", 27, "B");
+        givenPerson("기혁", 26, "o");
+        givenPerson("일권", 26, "AB");
+        givenPerson("호석", 25, "A");
+        givenPerson("준성", 25, "A");
+
+        List<Person> result = personRepository.findByBloodType("A");
+
+        result.forEach((System.out::println));
+    }
+
     private void givenPerson(String name, int age, String bloodType) {
         personRepository.save(new Person(name, age, bloodType));
     }
+
+
 
 }
