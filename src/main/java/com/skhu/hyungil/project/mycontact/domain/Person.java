@@ -40,6 +40,5 @@ public class Person {
 
     @OneToOne
     private Block block;
-
 }
 
