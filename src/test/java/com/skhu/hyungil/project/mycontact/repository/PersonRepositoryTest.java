@@ -1,7 +1,8 @@
 package com.skhu.hyungil.project.mycontact.repository;
 
 import com.skhu.hyungil.project.mycontact.domain.Person;
-import jdk.vm.ci.meta.Local;
+import com.skhu.hyungil.project.mycontact.domain.dto.Birthday;
+import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -75,12 +76,13 @@ class PersonRepositoryTest {
         givenPerson("영곤", 27, "B", LocalDate.of(1994, 1, 1));
         givenPerson("기혁", 26, "o", LocalDate.of(1995, 2, 2));
         givenPerson("일권", 26, "AB", LocalDate.of(1995, 3, 3));
-        givenPerson("호석", 25, "A", LocalDate.of(1998, 10, 4));
+        givenPerson("호석", 25, "A", LocalDate.of(1998, 10, 30));
 
-        List<Person> result = personRepository.findByBirthdayBetween(LocalDate.of(1994, 10, 1), LocalDate.of(1998, 10, 31));
+        List<Person> result = personRepository.findByMonthOfBirthday(10, 30);
 
         result.forEach(System.out::println);
     }
+
     // findByBloodType()에 생일 값이 없기 때문에 메소드 오버로딩 해준다.
     private void givenPerson(String name, int age, String bloodType) {
         givenPerson(name, age, bloodType, null);
@@ -88,7 +90,7 @@ class PersonRepositoryTest {
 
     private void givenPerson(String name, int age, String bloodType, LocalDate birthday) {
         Person person = new Person(name, age, bloodType);
-        person.setBirthday(birthday);
+        person.setBirthday(new Birthday(birthday.getYear(), birthday.getMonthValue(), birthday.getDayOfMonth()));
 
         personRepository.save(person);
 
