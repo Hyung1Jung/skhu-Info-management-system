@@ -1,11 +1,10 @@
 package com.skhu.hyungil.project.mycontact.domain;
 
 import com.skhu.hyungil.project.mycontact.domain.dto.Birthday;
-import com.sun.istack.NotNull;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import javax.validation.Valid;
 
 @Entity
 @NoArgsConstructor
@@ -14,7 +13,7 @@ import java.time.LocalDate;
 @Data
 public class Person {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NonNull
@@ -30,6 +29,7 @@ public class Person {
 
     private String address;
 
+    @Valid
     @Embedded //Birthday Entity 안의 Column을 하나의 갹체로 사용하고 싶을떄 @Embeded or @Embeddable
     private Birthday birthday;
 
