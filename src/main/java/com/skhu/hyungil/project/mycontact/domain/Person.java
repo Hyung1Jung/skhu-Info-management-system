@@ -30,7 +30,7 @@ public class Person {
 
     private String address;
 
-    @Embedded
+    @Embedded //Birthday Entity 안의 Column을 하나의 갹체로 사용하고 싶을떄 @Embeded or @Embeddable
     private Birthday birthday;
 
     private String job;
