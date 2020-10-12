@@ -3,3 +3,9 @@ insert into person(`id`, `name`, `age`, `blood_type`, `year_of_birthday`, `month
 insert into person(`id`, `name`, `age`, `blood_type`, `year_of_birthday`, `month_of_birthday`, `day_of_birthday`) values (3, 'gihyug', 26, 'A', 1995, 3, 2);
 insert into person(`id`, `name`, `age`, `blood_type`, `year_of_birthday`, `month_of_birthday`, `day_of_birthday`) values (4, 'hosuck', 26, 'AB', 1995, 2, 3);
 insert into person(`id`, `name`, `age`, `blood_type`, `year_of_birthday`, `month_of_birthday`, `day_of_birthday`) values (5, 'jinmin', 26, 'O', 1995, 10, 4);
+
+insert into block(`id`, `name`) values (1, 'gihyug');
+insert into block(`id`, `name`) values (2, 'hosuck');
+
+update person set block_id = 1 where id = 3;
+update person set block_id = 2 where id = 4;

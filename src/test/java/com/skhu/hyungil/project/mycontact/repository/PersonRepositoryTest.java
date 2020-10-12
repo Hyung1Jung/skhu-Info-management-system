@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 @SpringBootTest
 class PersonRepositoryTest {
     @Autowired // 빈주입
@@ -24,12 +26,13 @@ class PersonRepositoryTest {
 
         personRepository.save(person);
 
-        List<Person> result = personRepository.findByName("hosuck");
+        List<Person> people = personRepository.findByName("hosuck");
 
-        assertThat(result.size()).isEqualTo(1);
-        assertThat(result.get(0).getName()).isEqualTo("hosuck");
-        assertThat(result.get(0).getAge()).isEqualTo(27);
-        assertThat(result.get(0).getBloodType()).isEqualTo("A");
+        assertThat(people.size()).isEqualTo(2);
+        assertThat(people.get(0).getName()).isEqualTo("hosuck");
+        assertThat(people.get(0).getAge()).isEqualTo(26);
+        assertThat(people.get(0).getBloodType()).isEqualTo("AB");
+
     }
 
     @Test
