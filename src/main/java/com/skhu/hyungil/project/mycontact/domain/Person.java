@@ -5,6 +5,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @NoArgsConstructor
@@ -17,14 +19,19 @@ public class Person {
     private long id;
 
     @NonNull
+    @NotEmpty // String 값이기 때문에
+    @Column(nullable = false)
     private String name;
 
     @NonNull
+    @Min(1)
     private int age;
 
     private String hobby;
 
+    @NotEmpty
     @NonNull
+    @Column(nullable = false)
     private String bloodType;
 
     private String address;
