@@ -1,7 +1,9 @@
 package com.skhu.hyungil.project.mycontact.domain;
 
+import com.skhu.hyungil.project.mycontact.controller.dto.PersonDto;
 import com.skhu.hyungil.project.mycontact.domain.dto.Birthday;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -45,7 +47,34 @@ public class Person {
     @ToString.Exclude
     private String phoneNumber;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private Block block;
+
+    public void set(PersonDto personDto) {
+        if (personDto.getAge() != 0) {
+            this.setAge(personDto.getAge());
+        }
+
+        if(!StringUtils.isEmpty(personDto.getHobby())) {
+            this.setHobby(personDto.getHobby());
+        }
+
+        if(!StringUtils.isEmpty(personDto.getBloodType())) {
+            this.setHobby(personDto.getBloodType());
+        }
+
+        if(!StringUtils.isEmpty(personDto.getAddress())) {
+            this.setHobby(personDto.getAddress());
+        }
+
+        if(!StringUtils.isEmpty(personDto.getJob())) {
+            this.setHobby(personDto.getJob());
+        }
+
+        if(!StringUtils.isEmpty(personDto.getPhoneNumber())) {
+            this.setHobby(personDto.getPhoneNumber());
+        }
+    }
 }
 

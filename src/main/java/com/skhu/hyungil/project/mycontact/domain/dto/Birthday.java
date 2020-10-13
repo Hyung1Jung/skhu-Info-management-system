@@ -17,6 +17,7 @@ public class Birthday {
     @Min(1)
     @Max(12)
     private Integer monthOfBirthday;
+
     @Min(1)
     @Max(31)
     private Integer dayOfBirthday;
