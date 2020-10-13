@@ -33,10 +33,26 @@ class PersonControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(personController).build();
 
         mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/person")
+                MockMvcRequestBuilders.post("/api/person/1")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\n" +
                                 "  \"name\": \"hyungil2\",\n" +
+                                "  \"age\": 20,\n" +
+                                "  \"bloodType\": \"A\"\n" +
+                                "}"))
+                .andDo(print())
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void modifyPerson() throws Exception {
+        mockMvc = MockMvcBuilders.standaloneSetup(personController).build();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/person/1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content("{\n" +
+                                "  \"name\": \"hyungil\",\n" +
                                 "  \"age\": 20,\n" +
                                 "  \"bloodType\": \"A\"\n" +
                                 "}"))
