@@ -1,10 +1,12 @@
 package com.skhu.hyungil.project.mycontact.controller;
 
+import com.skhu.hyungil.project.mycontact.controller.dto.PersonDto;
 import com.skhu.hyungil.project.mycontact.domain.Person;
 import com.skhu.hyungil.project.mycontact.repository.PersonRepository;
 import com.skhu.hyungil.project.mycontact.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(value = "/api/person")
@@ -23,8 +25,16 @@ public class PersonController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED) // 성공한 경우 201로 리턴
     public void postPerson(@RequestBody Person person) {
         personService.put(person);
+
+        log.info("person -> {} ", personRepository.findAll());
+    }
+
+    @PutMapping("/{id}")
+    public void modifyPerson(@PathVariable Long id, @RequestBody PersonDto personDto) {
+        personService.modify(id, personDto);
 
         log.info("person -> {} ", personRepository.findAll());
     }
