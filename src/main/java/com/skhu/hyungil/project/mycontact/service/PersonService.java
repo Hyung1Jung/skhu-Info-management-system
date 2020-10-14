@@ -2,12 +2,11 @@ package com.skhu.hyungil.project.mycontact.service;
 
 import com.skhu.hyungil.project.mycontact.controller.dto.PersonDto;
 import com.skhu.hyungil.project.mycontact.domain.Person;
-import com.skhu.hyungil.project.mycontact.domain.dto.Birthday;
 import com.skhu.hyungil.project.mycontact.repository.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // 옵셔널 지원 <-> import javax.transaction.Transactional 지원 안 함
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -50,25 +49,24 @@ public class PersonService {
 
     @Transactional
     public void modify(Long id, PersonDto personDto) {
-        Person personAtDb = personRepository.findById(id).orElseThrow(() -> new RuntimeException("아이디가 존재하지 않습니다"));
+        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("아이디가 존재하지 않습니다"));
 
-        if (!personAtDb.getName().equals(personDto.getName())) {
+        if (!person.getName().equals(personDto.getName())) {
             throw new RuntimeException("이름이 다릅니다.");
         }
 
-        personAtDb.setName(personDto.getName());
-        personAtDb.setPhoneNumber(personDto.getPhoneNumber());
-        personAtDb.setJob(personDto.getJob());
+        person.set(personDto);
 
-        if(personDto.getBirthday() != null) {
-            personAtDb.setBirthday(new Birthday(personDto.getBirthday()));
-        }
-
-        personAtDb.setAddress(personDto.getAddress());
-        personAtDb.setBloodType(personDto.getBloodType());
-        personAtDb.setHobby(personDto.getHobby());
-        personAtDb.setAge(personDto.getAge());
-
-        personRepository.save(personAtDb);
+        personRepository.save(person);
     }
+
+    @Transactional
+    public void modify(Long id, String name) { // 이름 정보만 받아서 해당로직에 업데이트
+        Person person = personRepository.findById(id).orElseThrow(() -> new RuntimeException("아이디가 존재하지 않습니다"));
+
+        person.setName(name);
+
+        personRepository.save(person);
+    }
+
 }

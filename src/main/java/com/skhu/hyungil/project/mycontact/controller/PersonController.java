@@ -38,4 +38,12 @@ public class PersonController {
 
         log.info("person -> {} ", personRepository.findAll());
     }
+
+    @PatchMapping("/{id}") // 일부 리소스만 update
+    public void modifyPerson(@PathVariable Long id, String name) {
+        personService.modify(id, name);
+
+        log.info("person -> {} ", personRepository.findAll());
+
+    }
 }
