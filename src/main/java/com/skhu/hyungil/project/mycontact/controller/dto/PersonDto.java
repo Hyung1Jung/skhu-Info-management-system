@@ -1,7 +1,6 @@
 package com.skhu.hyungil.project.mycontact.controller.dto;
 
 import lombok.Data;
-
 import java.time.LocalDate;
 
 @Data
