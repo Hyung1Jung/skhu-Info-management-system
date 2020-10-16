@@ -10,8 +10,6 @@ import java.util.List;
 public interface PersonRepository extends JpaRepository<Person, Long> {
     List<Person> findByName(String name);
 
-    List<Person> findByBlockIsNull();
-
     @Query(value = "select person from Person person where person.birthday.monthOfBirthday = :monthOfBirthday") // ?1 -> 첫번째 인자자 //파라미터 맵핑이 더 효율적
     List<Person> findByMonthOfBirthday(@Param("monthOfBirthday") int monthOfBirthday);
 
