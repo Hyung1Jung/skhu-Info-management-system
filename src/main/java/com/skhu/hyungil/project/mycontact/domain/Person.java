@@ -60,6 +60,10 @@ public class Person {
         if(!StringUtils.isEmpty(personDto.getPhoneNumber())) {
             this.setHobby(personDto.getPhoneNumber());
         }
+
+        if (personDto.getBirthday() != null) {
+            this.setBirthday(Birthday.of(personDto.getBirthday()));
+        }
     }
 
     public Integer getAge() {
