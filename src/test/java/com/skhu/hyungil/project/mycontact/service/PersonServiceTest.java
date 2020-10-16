@@ -1,6 +1,7 @@
 package com.skhu.hyungil.project.mycontact.service;
 
 import com.skhu.hyungil.project.mycontact.domain.Person;
+import com.skhu.hyungil.project.mycontact.repository.PersonRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,22 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class PersonServiceTest {
     @Autowired
     private PersonService personService;
-
-    @Test
-    void getPeopleExcludeBlocks() {
-        List<Person> result = personService.getPeopleExcludeBlock();
-
-        result.forEach(System.out::println);
-
-        assertThat(result.size()).isEqualTo(3);
-        assertThat(result.get(0).getName()).isEqualTo("hyungil");
-        assertThat(result.get(1).getName()).isEqualTo("yunggon");
-        assertThat(result.get(2).getName()).isEqualTo("jinmin");
-
-
-        // result.forEach(System.out::println); // 리스트에 각 객체가 한 줄씩 노츌
-
-    }
+    @Autowired
+    private PersonRepository personRepository;
 
     @Test
     void getPeopleByName() {
