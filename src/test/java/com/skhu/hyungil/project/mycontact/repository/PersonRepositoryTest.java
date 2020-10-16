@@ -19,29 +19,16 @@ class PersonRepositoryTest {
     @Test
     void crud() {
         Person person = new Person();
-
-        person.setName("hosuck");
-        person.setBloodType("A");
+        person.setName("junsung");
 
         personRepository.save(person);
 
-        List<Person> people = personRepository.findByName("hosuck");
+        List<Person> people = personRepository.findByName("junsung");
 
-        assertThat(people.size()).isEqualTo(2);
-        assertThat(people.get(0).getName()).isEqualTo("hosuck");
+        assertThat(people.size()).isEqualTo(1);
+        assertThat(people.get(0).getName()).isEqualTo("junsung");
         // assertThat(people.get(0).getAge()).isEqualTo(26);
-        assertThat(people.get(0).getBloodType()).isEqualTo("AB");
 
-    }
-
-    @Test
-    void findByBloodType() {
-
-        List<Person> result = personRepository.findByBloodType("A");
-
-        assertThat(result.size()).isEqualTo(2);
-        assertThat(result.get(0).getName()).isEqualTo("hyungil");
-        assertThat(result.get(1).getName()).isEqualTo("gihyug");
     }
 
     @Test
