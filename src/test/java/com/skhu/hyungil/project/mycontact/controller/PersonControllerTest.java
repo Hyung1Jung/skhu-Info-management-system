@@ -1,5 +1,8 @@
 package com.skhu.hyungil.project.mycontact.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.skhu.hyungil.project.mycontact.controller.dto.PersonDto;
 import com.skhu.hyungil.project.mycontact.repository.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +14,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -22,6 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class PersonControllerTest {
     @Autowired
     private PersonController personController;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     PersonRepository personRepository;
@@ -63,9 +71,7 @@ class PersonControllerTest {
                 MockMvcRequestBuilders.put("/api/person/1")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content("{\n" +
-                                "  \"name\": \"hyungil\",\n" +
-                                "  \"age\": 20,\n" +
-                                "  \"bloodType\": \"A\"\n" +
+                                "  \"name\": \"hyungil\"" +
                                 "}"))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -75,9 +81,13 @@ class PersonControllerTest {
     void modifyName() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.patch("/api/person/1")
-                        .param("name", "hyungil22"))
+                        .param("name", "hyungilModifed"))
                 .andDo(print())
                 .andExpect(status().isOk());
+
+        assertThat(personRepository.findById(1L).get().getName()).isEqualTo("hyungilModifed");
+
+
 
     }
 
@@ -90,5 +100,18 @@ class PersonControllerTest {
 
         assertTrue(personRepository.findPeopleDeleted().stream().anyMatch(person -> person.getId() == 1L));
 
+    }
+    @Test
+    void checkJsonString() throws JsonProcessingException{
+        PersonDto dto = new PersonDto();
+        dto.setName("hyungil");
+        dto.setBirthday(LocalDate.now());
+        dto.setAddress("안양");
+
+        System.out.println(">>>" + toJsonString(dto));
+    }
+
+    private String toJsonString(PersonDto personDto) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(personDto);
     }
 }
