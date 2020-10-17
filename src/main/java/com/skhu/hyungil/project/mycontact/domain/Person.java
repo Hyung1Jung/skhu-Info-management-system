@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -77,5 +78,6 @@ public class Person {
     public boolean isBirthdayToday() {
         return LocalDate.now().equals(LocalDate.of(this.birthday.getYearOfBirthday(), this.birthday.getMonthOfBirthday(), this.birthday.getDayOfBirthday()));
     }
+
 }
 
