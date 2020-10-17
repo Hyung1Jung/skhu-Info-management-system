@@ -1,9 +1,7 @@
 package com.skhu.hyungil.project.mycontact.controller;
 
-import com.skhu.hyungil.project.mycontact.domain.Person;
 import com.skhu.hyungil.project.mycontact.repository.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -84,14 +82,13 @@ class PersonControllerTest {
     }
 
     @Test
-    @Disabled
     void deletePerson() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/api/person/1"))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        assertTrue(personRepository.findPeopleDeleted().stream().anyMatch(person -> person.getId().equals(1L)));
+        assertTrue(personRepository.findPeopleDeleted().stream().anyMatch(person -> person.getId() == 1L));
 
     }
 }
