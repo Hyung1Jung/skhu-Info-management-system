@@ -38,7 +38,7 @@ public class PersonController {
     }
 
     @PatchMapping("/{id}") // 일부 리소스만 update
-    public void modifyPerson(@PathVariable Long id, String name) {
+    public void modifyPerson(@PathVariable Long id,String name) {
         personService.modify(id, name);
 
     }
