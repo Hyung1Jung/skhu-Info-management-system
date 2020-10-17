@@ -1,5 +1,6 @@
 package com.skhu.hyungil.project.mycontact.controller;
 
+import com.skhu.hyungil.project.mycontact.domain.Person;
 import com.skhu.hyungil.project.mycontact.repository.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -12,6 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -89,7 +91,7 @@ class PersonControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        personRepository.findPeopleDeleted();
+        assertTrue(personRepository.findPeopleDeleted().stream().anyMatch(person -> person.getId().equals(1L)));
 
     }
 }
