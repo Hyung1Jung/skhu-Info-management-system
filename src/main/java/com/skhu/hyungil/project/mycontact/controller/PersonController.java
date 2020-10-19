@@ -26,8 +26,8 @@ public class PersonController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // 성공한 경우 201로 리턴
-    public void postPerson(@RequestBody Person person) {
-        personService.put(person);
+    public void postPerson(@RequestBody PersonDto personDto) { // 엔티티를 RequestBody로 받는 것은 그리 안전하지 않은 방법이다.
+        personService.put(personDto);
 
     }
 
