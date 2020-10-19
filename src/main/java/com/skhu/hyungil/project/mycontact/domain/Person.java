@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDate;
 
 
 @Entity
@@ -65,18 +64,6 @@ public class Person {
         if (personDto.getBirthday() != null) {
             this.setBirthday(Birthday.of(personDto.getBirthday()));
         }
-    }
-
-    public Integer getAge() {
-        if(this.birthday != null) {
-            return LocalDate.now().getYear() - this.birthday.getYearOfBirthday() + 1;
-        }else {
-            return null;
-        }
-    }
-
-    public boolean isBirthdayToday() {
-        return LocalDate.now().equals(LocalDate.of(this.birthday.getYearOfBirthday(), this.birthday.getMonthOfBirthday(), this.birthday.getDayOfBirthday()));
     }
 
 }
