@@ -51,15 +51,15 @@ public class Person {
         }
 
         if(!StringUtils.isEmpty(personDto.getAddress())) {
-            this.setHobby(personDto.getAddress());
+            this.setAddress(personDto.getAddress());
         }
 
         if(!StringUtils.isEmpty(personDto.getJob())) {
-            this.setHobby(personDto.getJob());
+            this.setJob(personDto.getJob());
         }
 
         if(!StringUtils.isEmpty(personDto.getPhoneNumber())) {
-            this.setHobby(personDto.getPhoneNumber());
+            this.setPhoneNumber(personDto.getPhoneNumber());
         }
 
         if (personDto.getBirthday() != null) {
