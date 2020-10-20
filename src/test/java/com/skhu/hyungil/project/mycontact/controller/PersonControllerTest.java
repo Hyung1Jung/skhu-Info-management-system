@@ -33,14 +33,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 class PersonControllerTest {
-    @Autowired
     private PersonController personController;
-    @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    PersonRepository personRepository;
-    @Autowired
+    private PersonRepository personRepository;
     private MappingJackson2HttpMessageConverter messageConverter;
+
+    @Autowired
+    public PersonControllerTest(PersonController personController, ObjectMapper objectMapper, PersonRepository personRepository, MappingJackson2HttpMessageConverter messageConverter){
+        this.personController = personController;
+        this.objectMapper = objectMapper;
+        this.personRepository = personRepository;
+        this.messageConverter = messageConverter;
+    }
+
+
 
     private MockMvc mockMvc;
 
