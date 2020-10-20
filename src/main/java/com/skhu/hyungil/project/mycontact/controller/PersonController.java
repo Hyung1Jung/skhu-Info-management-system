@@ -13,10 +13,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 public class PersonController {
-    @Autowired
     private PersonService personService;
-    @Autowired
     private PersonRepository personRepository;
+
+    @Autowired // 필드주입보다 생성자 주입을 추천
+    public PersonController(PersonService personService, PersonRepository personRepository) {
+        this.personService = personService;
+        this.personRepository = personRepository;
+    }
 
     // @RequestMapping(method = RequestMethod.GET)
     @GetMapping("/{id}")
@@ -38,7 +42,7 @@ public class PersonController {
     }
 
     @PatchMapping("/{id}") // 일부 리소스만 update
-    public void modifyPerson(@PathVariable Long id,String name) {
+    public void modifyPerson(@PathVariable Long id, String name) {
         personService.modify(id, name);
 
     }
