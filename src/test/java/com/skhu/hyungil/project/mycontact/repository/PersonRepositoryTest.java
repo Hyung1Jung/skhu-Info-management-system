@@ -35,10 +35,31 @@ class PersonRepositoryTest {
                 () -> assertThat(person.isDeleted()).isEqualTo(false)
         );
     }
+
     @Test
     void findByNameIfDeleted() {
         List<Person> people = personRepository.findByName("jiyun");
+
         assertThat(people.size()).isEqualTo(0);
+    }
+
+    @Test
+    void findByMonthOfBirthday() {
+        List<Person> people = personRepository.findByMonthOfBirthday(10);
+
+        assertThat(people.size()).isEqualTo(2);
+        assertAll(
+                () -> assertThat(people.get(0).getName()).isEqualTo("hyungil"),
+                () -> assertThat(people.get(1).getName()).isEqualTo("jinmin")
+        );
+    }
+
+    @Test
+    void findPeopleDeleted() {
+        List<Person> people = personRepository.findPeopleDeleted();
+
+        assertThat(people.size()).isEqualTo(1);
+        assertThat(people.get(0).getName()).isEqualTo("jiyun");
     }
 
 }

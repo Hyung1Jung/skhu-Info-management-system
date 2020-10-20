@@ -44,8 +44,7 @@ class PersonControllerTest {
 
     private MockMvc mockMvc;
 
-    @BeforeEach
-        // 해당 메소드는 매 test마다 먼저 실행이됨
+    @BeforeEach     // 해당 메소드는 매 test마다 먼저 실행이됨
     void beforeEach() {
         mockMvc = MockMvcBuilders.standaloneSetup(personController).setMessageConverters(messageConverter).build();
     }
