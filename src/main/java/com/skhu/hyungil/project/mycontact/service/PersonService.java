@@ -13,8 +13,13 @@ import java.util.List;
 @Service
 @Slf4j
 public class PersonService {
+
+    PersonRepository personRepository;
+
     @Autowired
-    private PersonRepository personRepository;
+    public PersonService(PersonRepository personRepository) {
+        this.personRepository = personRepository;
+    }
 
     public List<Person> getPeopleByName(String name) {
         return personRepository.findByName(name);
