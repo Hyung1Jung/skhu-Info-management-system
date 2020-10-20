@@ -17,19 +17,12 @@ public class PersonService {
     private PersonRepository personRepository;
 
     public List<Person> getPeopleByName(String name) {
-        //  List<Person> people = personRepository.findAll();
-        //  return people.stream().filter(person -> person.getName().equals(name)).collect(Collectors.toList());
-
         return personRepository.findByName(name);
     }
 
     @Transactional(readOnly = true)
     public Person getPerson(Long id) {
-        Person person = personRepository.findById(id).orElse(null);
-
-        log.info("person : {}", person);
-
-        return person;
+        return personRepository.findById(id).orElse(null);
     }
 
     @Transactional
