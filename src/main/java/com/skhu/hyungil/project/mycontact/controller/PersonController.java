@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 public class PersonController {
-    private PersonService personService;
-    private PersonRepository personRepository;
+    private final PersonService personService;
+    private final PersonRepository personRepository;
 
     @Autowired // 필드주입보다 생성자 주입을 추천
     public PersonController(PersonService personService, PersonRepository personRepository) {
