@@ -111,6 +111,25 @@ class PersonServiceTest {
         verify(personRepository, times(1)).save((argThat(new IsNameWillBeUpdated())));
     }
 
+    @Test
+    void deleteIfPersonNotFound() {
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> personService.delete(1L));
+    }
+
+    @Test
+    void delete() {
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.of(new Person("hyungil")));
+
+        personService.delete(1L);
+
+        verify(personRepository, times(1)).save(argThat(new IsPersonWillBeDeleted()));
+
+    }
+
     private static class IsPersonWillBeUpdated implements ArgumentMatcher<Person> {
         @Override
         public boolean matches(Person person) {
@@ -136,6 +155,13 @@ class PersonServiceTest {
         @Override
         public boolean matches(Person person) {
             return person.getName().equals("suhun");
+        }
+    }
+
+    private static class IsPersonWillBeDeleted implements ArgumentMatcher<Person> {
+        @Override
+        public boolean matches(Person person) {
+            return person.isDeleted();
         }
     }
 }
