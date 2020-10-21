@@ -73,13 +73,15 @@ class PersonServiceTest {
 
         assertThrows(RuntimeException.class, () -> personService.modify(1L, mockPersonDto()));
     }
+
     @Test
     void modifyIfNameIsDifferent() {
         when(personRepository.findById(1L))
                 .thenReturn(Optional.of(new Person("jihun")));
 
-        assertThrows(RuntimeException.class,  () -> personService.modify(1L,mockPersonDto()));
+        assertThrows(RuntimeException.class, () -> personService.modify(1L, mockPersonDto()));
     }
+
     @Test
     void modify() {
         when(personRepository.findById(1L))
@@ -91,15 +93,33 @@ class PersonServiceTest {
         verify(personRepository, times(1)).save(argThat(new IsPersonWillBeUpdated()));
     }
 
+    @Test
+    void modifyByNameIfPersonNotFound() {
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> personService.modify(1L, "suhun"));
+    }
+
+    @Test
+    void modifyByName() {
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.of(new Person("hyungil")));
+
+        personService.modify(1L, "suhun");
+
+        verify(personRepository, times(1)).save((argThat(new IsNameWillBeUpdated())));
+    }
+
     private static class IsPersonWillBeUpdated implements ArgumentMatcher<Person> {
         @Override
         public boolean matches(Person person) {
             return equals(person.getName(), "hyungil")
-                    && equals(person.getHobby(),"programming")
-                    && equals(person.getAddress(),"안양")
-                    && equals(person.getBirthday(),Birthday.of(LocalDate.now()))
-                    && equals(person.getJob(),"programmer")
-                    && equals(person.getPhoneNumber(),"010-1234-1234");
+                    && equals(person.getHobby(), "programming")
+                    && equals(person.getAddress(), "안양")
+                    && equals(person.getBirthday(), Birthday.of(LocalDate.now()))
+                    && equals(person.getJob(), "programmer")
+                    && equals(person.getPhoneNumber(), "010-1234-1234");
         }
 
         private boolean equals(Object actual, Object expected) {
@@ -107,7 +127,15 @@ class PersonServiceTest {
         }
 
     }
+
     private PersonDto mockPersonDto() {
         return PersonDto.of("hyungil", "programming", "안양", LocalDate.now(), "programmer", "010-1234-1234");
+    }
+
+    private static class IsNameWillBeUpdated implements ArgumentMatcher<Person> {
+        @Override
+        public boolean matches(Person person) {
+            return person.getName().equals("suhun");
+        }
     }
 }
