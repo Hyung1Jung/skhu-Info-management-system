@@ -2,10 +2,12 @@ package com.skhu.hyungil.project.mycontact.service;
 
 import com.skhu.hyungil.project.mycontact.controller.dto.PersonDto;
 import com.skhu.hyungil.project.mycontact.domain.Person;
+import com.skhu.hyungil.project.mycontact.domain.dto.Birthday;
 import com.skhu.hyungil.project.mycontact.repository.PersonRepository;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,10 +61,53 @@ class PersonServiceTest {
 
     @Test
     void put() {
-        PersonDto dto = PersonDto.of("hyungil", "programming", "안양", LocalDate.now(), "programmer", "010-1234-1234");
-
-        personService.put(dto);
+        personService.put(mockPersonDto());
 
         verify(personRepository, times(1)).save(any(Person.class));
+    }
+
+    @Test
+    void modifyIfPersonNotFound() {
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> personService.modify(1L, mockPersonDto()));
+    }
+    @Test
+    void modifyIfNameIsDifferent() {
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.of(new Person("jihun")));
+
+        assertThrows(RuntimeException.class,  () -> personService.modify(1L,mockPersonDto()));
+    }
+    @Test
+    void modify() {
+        when(personRepository.findById(1L))
+                .thenReturn(Optional.of(new Person("hyungil")));
+
+        personService.modify(1L, mockPersonDto());
+
+        // verify(personRepository, times(1)).save(any(Person.class));
+        verify(personRepository, times(1)).save(argThat(new IsPersonWillBeUpdated()));
+    }
+
+    private static class IsPersonWillBeUpdated implements ArgumentMatcher<Person> {
+        @Override
+        public boolean matches(Person person) {
+            return equals(person.getName(), "hyungil")
+                    && equals(person.getHobby(),"programming")
+                    && equals(person.getAddress(),"안양")
+                    && equals(person.getBirthday(),Birthday.of(LocalDate.now()))
+                    && equals(person.getJob(),"programmer")
+                    && equals(person.getPhoneNumber(),"010-1234-1234");
+        }
+
+        private boolean equals(Object actual, Object expected) {
+            return expected.equals(actual);
+        }
+
+    }
+    private PersonDto mockPersonDto() {
+        return PersonDto.of("hyungil", "programming", "안양", LocalDate.now(), "programmer", "010-1234-1234");
     }
 }
