@@ -3,6 +3,8 @@ package com.skhu.hyungil.project.mycontact.service;
 import com.skhu.hyungil.project.mycontact.controller.dto.PersonDto;
 import com.skhu.hyungil.project.mycontact.domain.Person;
 import com.skhu.hyungil.project.mycontact.domain.dto.Birthday;
+import com.skhu.hyungil.project.mycontact.exception.PersonNotFoundException;
+import com.skhu.hyungil.project.mycontact.exception.RenameNotPermittedException;
 import com.skhu.hyungil.project.mycontact.repository.PersonRepository;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -71,7 +73,7 @@ class PersonServiceTest {
         when(personRepository.findById(1L))
                 .thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> personService.modify(1L, mockPersonDto()));
+        assertThrows(PersonNotFoundException.class, () -> personService.modify(1L, mockPersonDto()));
     }
 
     @Test
@@ -79,7 +81,7 @@ class PersonServiceTest {
         when(personRepository.findById(1L))
                 .thenReturn(Optional.of(new Person("jihun")));
 
-        assertThrows(RuntimeException.class, () -> personService.modify(1L, mockPersonDto()));
+        assertThrows(RenameNotPermittedException.class, () -> personService.modify(1L, mockPersonDto()));
     }
 
     @Test
@@ -98,7 +100,8 @@ class PersonServiceTest {
         when(personRepository.findById(1L))
                 .thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> personService.modify(1L, "suhun"));
+
+        assertThrows(PersonNotFoundException.class, () -> personService.modify(1L, "suhun"));
     }
 
     @Test
@@ -116,7 +119,7 @@ class PersonServiceTest {
         when(personRepository.findById(1L))
                 .thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> personService.delete(1L));
+        assertThrows(PersonNotFoundException.class, () -> personService.delete(1L));
     }
 
     @Test
