@@ -45,11 +45,9 @@ class PersonControllerTest {
         this.messageConverter = messageConverter;
     }
 
-
     private MockMvc mockMvc;
 
-    @BeforeEach
-        // 해당 메소드는 매 test마다 먼저 실행이됨
+    @BeforeEach// 해당 메소드는 매 test마다 먼저 실행이됨
     void beforeEach() {
         mockMvc = MockMvcBuilders.standaloneSetup(personController).setMessageConverters(messageConverter).
                   addFilters(new CharacterEncodingFilter("UTF-8",true)).build();
@@ -129,7 +127,9 @@ class PersonControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(toJsonString(dto)))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("이름을 변경하지 않습니다."));
     }
 
 
