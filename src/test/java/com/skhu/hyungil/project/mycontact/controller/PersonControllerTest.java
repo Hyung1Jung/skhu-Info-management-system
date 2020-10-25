@@ -47,17 +47,19 @@ class PersonControllerTest {
 
     private MockMvc mockMvc;
 
-    @BeforeEach// 해당 메소드는 매 test마다 먼저 실행이됨
+    @BeforeEach
+// 해당 메소드는 매 test마다 먼저 실행이됨
     void beforeEach() {
         mockMvc = MockMvcBuilders.standaloneSetup(personController).setMessageConverters(messageConverter).
-                  addFilters(new CharacterEncodingFilter("UTF-8",true)).build();
+                addFilters(new CharacterEncodingFilter("UTF-8", true))
+                .alwaysDo(print())
+                .build();
     }
 
     @Test
     void getPerson() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/person/1"))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("hyungil")) // $ 객체의미 // value 가져온 값에 대한 검증
                 .andExpect(jsonPath("$.hobby").isEmpty())
@@ -79,7 +81,6 @@ class PersonControllerTest {
                 MockMvcRequestBuilders.post("/api/person")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(toJsonString(dto)))
-                .andDo(print())
                 .andExpect(status().isCreated());
 
         Person result = personRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).get(0);
@@ -102,7 +103,6 @@ class PersonControllerTest {
                 MockMvcRequestBuilders.put("/api/person/1")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(toJsonString(dto)))
-                .andDo(print())
                 .andExpect(status().isOk());
 
         Person result = personRepository.findById(1L).get();
@@ -119,26 +119,36 @@ class PersonControllerTest {
     }
 
     @Test
-    void modifyPersonPersonIfNameIsDifferent() throws Exception {
+    void modifyPersonIfNameIsDifferent() throws Exception {
         PersonDto dto = PersonDto.of("minsub", "programming", "안양", LocalDate.now(), "programmer", "010-1234-1234");
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/person/1")
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(toJsonString(dto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(400))
                 .andExpect(jsonPath("$.message").value("이름을 변경하지 않습니다."));
     }
 
+    @Test
+    void modifyPersonIfPersonNotFound() throws Exception {
+        PersonDto dto = PersonDto.of("hyungil", "programming", "안양", LocalDate.now(), "programmer", "010-1234-1234");
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/person/10")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(toJsonString(dto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("Person Entity가 존재하지 않습니다."));
+    }
 
     @Test
     void modifyName() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.patch("/api/person/1")
                         .param("name", "hyungilModifed"))
-                .andDo(print())
                 .andExpect(status().isOk());
 
         assertThat(personRepository.findById(1L).get().getName()).isEqualTo("hyungilModifed");
@@ -150,7 +160,6 @@ class PersonControllerTest {
     void deletePerson() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/api/person/1"))
-                .andDo(print())
                 .andExpect(status().isOk());
 
         assertTrue(personRepository.findPeopleDeleted().stream().anyMatch(person -> person.getId() == 1L));
