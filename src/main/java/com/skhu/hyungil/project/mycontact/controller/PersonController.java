@@ -2,6 +2,7 @@ package com.skhu.hyungil.project.mycontact.controller;
 
 import com.skhu.hyungil.project.mycontact.controller.dto.PersonDto;
 import com.skhu.hyungil.project.mycontact.domain.Person;
+import com.skhu.hyungil.project.mycontact.exception.PersonNotFoundException;
 import com.skhu.hyungil.project.mycontact.exception.RenameNotPermittedException;
 import com.skhu.hyungil.project.mycontact.exception.dto.ErrorResponse;
 import com.skhu.hyungil.project.mycontact.repository.PersonRepository;
@@ -17,12 +18,10 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class PersonController {
     private final PersonService personService;
-    private final PersonRepository personRepository;
 
     @Autowired // 필드주입보다 생성자 주입을 추천
     public PersonController(PersonService personService, PersonRepository personRepository) {
         this.personService = personService;
-        this.personRepository = personRepository;
     }
 
     // @RequestMapping(method = RequestMethod.GET)
@@ -49,17 +48,19 @@ public class PersonController {
         personService.modify(id, name);
     }
 
-    @ExceptionHandler(value = RenameNotPermittedException.class)
-    public ResponseEntity<ErrorResponse> handleRenameNoPermittedException(RenameNotPermittedException ex) {
-        return new ResponseEntity<>(ErrorResponse.of(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
-    }
-
-
     @DeleteMapping("/{id}")
     public void deletePerson(@PathVariable Long id) {
         personService.delete(id);
 
     }
 
+    @ExceptionHandler(value = RenameNotPermittedException.class)
+    public ResponseEntity<ErrorResponse> handleRenameNoPermittedException(RenameNotPermittedException ex) {
+        return new ResponseEntity<>(ErrorResponse.of(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 
+    @ExceptionHandler(value = PersonNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePersonNotFoundException(PersonNotFoundException ex) {
+        return new ResponseEntity<>(ErrorResponse.of(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 }
