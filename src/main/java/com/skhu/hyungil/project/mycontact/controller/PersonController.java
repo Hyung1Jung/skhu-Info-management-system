@@ -2,11 +2,14 @@ package com.skhu.hyungil.project.mycontact.controller;
 
 import com.skhu.hyungil.project.mycontact.controller.dto.PersonDto;
 import com.skhu.hyungil.project.mycontact.domain.Person;
+import com.skhu.hyungil.project.mycontact.exception.RenameNotPermittedException;
+import com.skhu.hyungil.project.mycontact.exception.dto.ErrorResponse;
 import com.skhu.hyungil.project.mycontact.repository.PersonRepository;
 import com.skhu.hyungil.project.mycontact.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping(value = "/api/person")
@@ -38,14 +41,19 @@ public class PersonController {
     @PutMapping("/{id}")
     public void modifyPerson(@PathVariable Long id, @RequestBody PersonDto personDto) {
         personService.modify(id, personDto);
-
     }
 
     @PatchMapping("/{id}") // 일부 리소스만 update
     public void modifyPerson(@PathVariable Long id, String name) {
-        personService.modify(id, name);
 
+        personService.modify(id, name);
     }
+
+    @ExceptionHandler(value = RenameNotPermittedException.class)
+    public ResponseEntity<ErrorResponse> handleRenameNoPermittedException(RenameNotPermittedException ex) {
+        return new ResponseEntity<>(ErrorResponse.of(HttpStatus.BAD_REQUEST.value(), ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 
     @DeleteMapping("/{id}")
     public void deletePerson(@PathVariable Long id) {
