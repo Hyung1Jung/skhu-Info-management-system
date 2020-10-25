@@ -96,6 +96,18 @@ class PersonControllerTest {
     }
 
     @Test
+    void postPersonIfNameIsNull() throws Exception {
+        PersonDto dto = new PersonDto();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/person")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(toJsonString(dto)))
+                .andExpect(jsonPath("$.code").value(500))
+                .andExpect(jsonPath("$.message").value("알 수 없는 서버 오류가 발생하였습니다"));
+    }
+
+    @Test
     void modifyPerson() throws Exception {
         PersonDto dto = PersonDto.of("hyungil", "programming", "안양", LocalDate.now(), "programmer", "010-1234-1234");
 
