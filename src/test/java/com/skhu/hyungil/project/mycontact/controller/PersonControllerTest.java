@@ -17,14 +17,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.util.NestedServletException;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,7 +38,7 @@ class PersonControllerTest {
     private final MappingJackson2HttpMessageConverter messageConverter;
 
     @Autowired
-    public PersonControllerTest(PersonController personController, ObjectMapper objectMapper, PersonRepository personRepository, MappingJackson2HttpMessageConverter messageConverter){
+    public PersonControllerTest(PersonController personController, ObjectMapper objectMapper, PersonRepository personRepository, MappingJackson2HttpMessageConverter messageConverter) {
         this.personController = personController;
         this.objectMapper = objectMapper;
         this.personRepository = personRepository;
@@ -47,12 +46,13 @@ class PersonControllerTest {
     }
 
 
-
     private MockMvc mockMvc;
 
-    @BeforeEach     // 해당 메소드는 매 test마다 먼저 실행이됨
+    @BeforeEach
+        // 해당 메소드는 매 test마다 먼저 실행이됨
     void beforeEach() {
-        mockMvc = MockMvcBuilders.standaloneSetup(personController).setMessageConverters(messageConverter).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(personController).setMessageConverters(messageConverter).
+                  addFilters(new CharacterEncodingFilter("UTF-8",true)).build();
     }
 
     @Test
@@ -124,13 +124,12 @@ class PersonControllerTest {
     void modifyPersonPersonIfNameIsDifferent() throws Exception {
         PersonDto dto = PersonDto.of("minsub", "programming", "안양", LocalDate.now(), "programmer", "010-1234-1234");
 
-        assertThrows(NestedServletException.class, () ->
-                mockMvc.perform(
-                        MockMvcRequestBuilders.put("/api/person/1")
-                                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                                .content(toJsonString(dto)))
-                        .andDo(print())
-                        .andExpect(status().isOk()));
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/person/1")
+                        .contentType(MediaType.APPLICATION_JSON_UTF8)
+                        .content(toJsonString(dto)))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
 
