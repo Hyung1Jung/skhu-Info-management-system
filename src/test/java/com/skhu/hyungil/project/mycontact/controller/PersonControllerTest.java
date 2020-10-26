@@ -39,7 +39,7 @@ class PersonControllerTest {
     private final WebApplicationContext wac;
 
     @Autowired
-    public PersonControllerTest(PersonController personController, ObjectMapper objectMapper, PersonRepository personRepository, MappingJackson2HttpMessageConverter messageConverter, GlobalExceptionHandler globalExceptionHandler, WebApplicationContext wac) {
+    public PersonControllerTest(ObjectMapper objectMapper, PersonRepository personRepository, MappingJackson2HttpMessageConverter messageConverter, GlobalExceptionHandler globalExceptionHandler, WebApplicationContext wac) {
         this.objectMapper = objectMapper;
         this.personRepository = personRepository;
         this.wac = wac;

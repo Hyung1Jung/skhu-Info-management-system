@@ -17,9 +17,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 class practiceControllerTest {
-    @Autowired
+
     private WebApplicationContext wac;
     private MockMvc mockMvc;
+
+    @Autowired
+    private practiceControllerTest(WebApplicationContext wac) {
+        this.wac = wac;
+    }
 
     @BeforeEach
     void beforeEach() {
