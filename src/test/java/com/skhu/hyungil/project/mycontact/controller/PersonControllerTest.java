@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skhu.hyungil.project.mycontact.controller.dto.PersonDto;
 import com.skhu.hyungil.project.mycontact.domain.Person;
 import com.skhu.hyungil.project.mycontact.domain.dto.Birthday;
+import com.skhu.hyungil.project.mycontact.exception.handler.GlobalExceptionHandler;
 import com.skhu.hyungil.project.mycontact.repository.PersonRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.time.LocalDate;
@@ -32,17 +34,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 class PersonControllerTest {
-    private final PersonController personController;
     private final ObjectMapper objectMapper;
     private final PersonRepository personRepository;
-    private final MappingJackson2HttpMessageConverter messageConverter;
+    private final WebApplicationContext wac;
 
     @Autowired
-    public PersonControllerTest(PersonController personController, ObjectMapper objectMapper, PersonRepository personRepository, MappingJackson2HttpMessageConverter messageConverter) {
-        this.personController = personController;
+    public PersonControllerTest(PersonController personController, ObjectMapper objectMapper, PersonRepository personRepository, MappingJackson2HttpMessageConverter messageConverter, GlobalExceptionHandler globalExceptionHandler, WebApplicationContext wac) {
         this.objectMapper = objectMapper;
         this.personRepository = personRepository;
-        this.messageConverter = messageConverter;
+        this.wac = wac;
     }
 
     private MockMvc mockMvc;
@@ -50,8 +50,9 @@ class PersonControllerTest {
     @BeforeEach
 // 해당 메소드는 매 test마다 먼저 실행이됨
     void beforeEach() {
-        mockMvc = MockMvcBuilders.standaloneSetup(personController).setMessageConverters(messageConverter).
-                addFilters(new CharacterEncodingFilter("UTF-8", true))
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(wac)
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
                 .alwaysDo(print())
                 .build();
     }
