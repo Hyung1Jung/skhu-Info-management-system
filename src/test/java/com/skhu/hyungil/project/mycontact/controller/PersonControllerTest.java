@@ -107,7 +107,7 @@ class PersonControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(
                         400))
-                .andExpect(jsonPath("$.message").value("이름은 필수값입니다."));
+                .andExpect(jsonPath("$.message").value("이름은 필수값입니다"));
     }
 
     @Test
