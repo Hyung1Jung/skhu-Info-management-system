@@ -31,6 +31,20 @@ class PersonServiceTest {
     private PersonRepository personRepository;
 
     @Test
+    void getAll() {
+        when(personRepository.findAll())
+                .thenReturn(Lists.newArrayList(new Person("hyungil"), new Person("yunggon"), new Person("gihyug")));
+
+        List<Person> result = personService.getAll();
+
+        assertThat(result.size()).isEqualTo(3);
+        assertThat(result.get(0).getName()).isEqualTo("hyungil");
+        assertThat(result.get(1).getName()).isEqualTo("yunggon");
+        assertThat(result.get(2).getName()).isEqualTo("gihyug");
+
+    }
+
+    @Test
     void getPeopleByName() {
         when(personRepository.findByName("hyungil"))  // when은 if와 같은 느낌
                 .thenReturn(Lists.newArrayList(new Person("hyungil")));
