@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping(value = "/api/person")
 @RestController
@@ -19,6 +20,11 @@ public class PersonController {
     @Autowired // 필드주입보다 생성자 주입을 추천
     public PersonController(PersonService personService) {
         this.personService = personService;
+    }
+
+    @GetMapping
+    public List<Person> getAll() {
+        return personService.getAll();
     }
 
     // @RequestMapping(method = RequestMethod.GET)
